@@ -232,6 +232,12 @@
   }
 }
 
+.project-actions {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: auto;
+}
+
 .project-link {
   display: inline-flex;
   align-items: center;
@@ -246,6 +252,14 @@
   &:hover {
     gap: 0.75rem;
     color: #2563eb;
+  }
+
+  &.repo {
+    color: #475569;
+    
+    &:hover {
+      color: #0f172a;
+    }
   }
 
   .material-symbols-outlined {

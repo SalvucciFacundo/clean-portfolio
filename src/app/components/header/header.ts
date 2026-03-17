@@ -23,7 +23,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         </nav>
 
         <div class="actions">
-          <button class="btn btn-primary hire-btn">Hire Me</button>
+          <a href="mailto:fds1288@gmail.com" class="btn btn-primary hire-btn">Hire Me</a>
           <button class="menu-btn">
             <span class="material-symbols-outlined">menu</span>
           </button>

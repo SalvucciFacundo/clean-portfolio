@@ -7,6 +7,7 @@ interface Project {
   category: string;
   tags: string[];
   link?: string;
+  repoLink?: string;
   statusLabel?: string;
 }
 
@@ -50,12 +51,20 @@ interface Project {
                       <span class="tag">{{ tag }}</span>
                     }
                   </div>
-                  @if (project.link) {
-                    <a [href]="project.link" target="_blank" class="project-link">
-                      Visit Project
-                      <span class="material-symbols-outlined">north_east</span>
-                    </a>
-                  }
+                  <div class="project-actions">
+                    @if (project.link) {
+                      <a [href]="project.link" target="_blank" class="project-link">
+                        Live Demo
+                        <span class="material-symbols-outlined">north_east</span>
+                      </a>
+                    }
+                    @if (project.repoLink) {
+                      <a [href]="project.repoLink" target="_blank" class="project-link repo">
+                        GitHub
+                        <span class="material-symbols-outlined">terminal</span>
+                      </a>
+                    }
+                  </div>
                 </div>
               </div>
             }
@@ -82,11 +91,12 @@ export class ProjectsComponent {
     {
       title: 'Mis Canarios',
       description: 'Comprehensive management system for canary breeders. Includes pedigree tracking, breeding records, and health cycles. (Production Ready)',
-      image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?auto=format&fit=crop&q=80&w=800',
+      image: 'assets/mis-canarios.png',
       category: 'Full-Stack',
       statusLabel: 'Production',
       tags: ['Angular', 'Firebase', 'Tailwind'],
-      link: 'https://miscanarios.com.ar'
+      link: 'https://miscanarios.com.ar',
+      repoLink: 'https://github.com/SalvucciFacundo/Mis-Canarios-A-F'
     },
     {
       title: 'Mendoza Shop Web',
@@ -95,7 +105,8 @@ export class ProjectsComponent {
       category: 'Development',
       statusLabel: 'In Progress',
       tags: ['Angular', 'Firebase', 'Tailwind'],
-      link: 'https://mendoza-shop.web.app/'
+      link: 'https://mendoza-shop.web.app/',
+      repoLink: 'https://github.com/SalvucciFacundo/Mendoza-Shop-Web'
     },
     {
       title: 'Novel Editor AI',
@@ -103,7 +114,8 @@ export class ProjectsComponent {
       image: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&q=80&w=800',
       category: 'Web App',
       tags: ['Angular', 'Firebase', 'OpenAI'],
-      link: 'https://web-novel-16cd7.web.app'
+      link: 'https://web-novel-16cd7.web.app',
+      repoLink: 'https://github.com/SalvucciFacundo/novel-editor'
     },
     {
       title: 'IDE Style Portfolio',
@@ -111,7 +123,8 @@ export class ProjectsComponent {
       image: 'https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&q=80&w=800',
       category: 'UI Concept',
       tags: ['Angular', 'CSS Grid', 'Theming'],
-      link: 'https://portafolio-f6f99.web.app'
+      link: 'https://portafolio-f6f99.web.app',
+      repoLink: 'https://github.com/SalvucciFacundo/Portfolio'
     },
     {
       title: 'Sector Remeras',
@@ -119,7 +132,8 @@ export class ProjectsComponent {
       image: 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&q=80&w=800',
       category: 'E-commerce',
       tags: ['Angular', 'Firebase', 'Tailwind'],
-      link: 'https://sector-remeras.web.app/'
+      link: 'https://sector-remeras.web.app/',
+      repoLink: 'https://github.com/SalvucciFacundo/sector-remeras'
     },
     {
       title: 'Tecno Shop',
@@ -127,7 +141,8 @@ export class ProjectsComponent {
       image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=80&w=800',
       category: 'E-commerce',
       tags: ['Angular', 'Firebase'],
-      link: 'https://tecno-shop-ba780.web.app/'
+      link: 'https://tecno-shop-ba780.web.app/',
+      repoLink: 'https://github.com/SalvucciFacundo/tecno-shop'
     },
     {
       title: 'Dólar Hoy Arg',
@@ -135,6 +150,7 @@ export class ProjectsComponent {
       image: 'https://images.unsplash.com/photo-1580519542036-c47de6196ba5?auto=format&fit=crop&q=80&w=800',
       category: 'Dashboard',
       tags: ['Angular', 'Financial API', 'Tailwind'],
+      repoLink: 'https://github.com/SalvucciFacundo/dolar-hoy-arg'
     },
     {
       title: 'Clasificador IA',
@@ -142,6 +158,7 @@ export class ProjectsComponent {
       image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=800',
       category: 'AI / Machine Learning',
       tags: ['TensorFlow.js', 'Angular', 'Machine Learning'],
+      repoLink: 'https://github.com/SalvucciFacundo/ClasificadorIA'
     },
     {
       title: 'IA Text Editor',
@@ -149,6 +166,7 @@ export class ProjectsComponent {
       image: 'https://images.unsplash.com/photo-1542435503-956c469947f6?auto=format&fit=crop&q=80&w=800',
       category: 'AI / Productivity',
       tags: ['Angular', 'GPT API', 'Node.js'],
+      repoLink: 'https://github.com/SalvucciFacundo/IA-TextEditor-WebNovel'
     }
   ];
 
