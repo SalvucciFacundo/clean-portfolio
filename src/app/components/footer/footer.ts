@@ -6,14 +6,18 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer class="footer">
-      <div class="container footer-centered">
-        <div class="footer-cta">
-          <h4 class="links-title">Have a project?</h4>
-          <p>Let's build something amazing together.</p>
-          <a href="mailto:fds1288@gmail.com" class="btn btn-primary footer-btn">
-            Get in Touch
-            <span class="material-symbols-outlined">mail</span>
-          </a>
+      <div class="container">
+        <div class="footer-cta-horizontal">
+          <div class="cta-text">
+            <h4 class="links-title">Have a project?</h4>
+            <p>Let's build something amazing together.</p>
+          </div>
+          <div class="cta-action">
+            <a href="mailto:fds1288@gmail.com" class="btn btn-primary footer-btn">
+              Get in Touch
+              <span class="material-symbols-outlined">mail</span>
+            </a>
+          </div>
         </div>
       </div>
       
@@ -30,38 +34,48 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     .footer {
       background-color: #0f172a;
       color: white;
-      padding: 4rem 0 2rem;
+      padding: 3rem 0 2rem;
     }
 
-    .footer-centered {
+    .footer-cta-horizontal {
       display: flex;
-      justify-content: center;
-      text-align: center;
-      padding-bottom: 3rem;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 2.5rem;
       border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      margin-bottom: 3rem;
-    }
-
-    .links-title {
-      font-size: 1.5rem;
-      font-weight: 800;
-      margin-bottom: 1rem;
-      color: white;
-    }
-
-    .footer-cta p {
-      color: #94a3b8;
       margin-bottom: 2rem;
-      font-size: 1.125rem;
+      gap: 2rem;
+
+      @media (max-width: 768px) {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+      }
+    }
+
+    .cta-text {
+      .links-title {
+        font-size: 1.25rem;
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: white;
+      }
+
+      p {
+        color: #94a3b8;
+        font-size: 1rem;
+        margin: 0;
+      }
     }
 
     .footer-btn {
-      margin: 0 auto;
-      padding: 1rem 2rem;
+      padding: 0.875rem 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
     }
 
     .footer-bottom {
-      padding-top: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -70,7 +84,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
       @media (max-width: 640px) {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 1.25rem;
         text-align: center;
       }
     }
@@ -82,6 +96,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       a {
         color: #64748b;
         text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s ease;
+
         &:hover {
           color: white;
         }
