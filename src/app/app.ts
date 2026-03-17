@@ -1,15 +1,22 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { Header } from './components/header/header';
-import { Hero } from './components/hero/hero';
-import { Skills } from './components/skills/skills';
-import { Projects } from './components/projects/projects';
-import { Education } from './components/education/education';
-import { Footer } from './components/footer/footer';
+import { HeaderComponent } from './components/header/header';
+import { HeroComponent } from './components/hero/hero';
+import { SkillsComponent } from './components/skills/skills';
+import { ProjectsComponent } from './components/projects/projects';
+import { EducationComponent } from './components/education/education';
+import { FooterComponent } from './components/footer/footer';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [Header, Hero, Skills, Projects, Education, Footer],
+  imports: [
+    HeaderComponent,
+    HeroComponent,
+    SkillsComponent,
+    ProjectsComponent,
+    EducationComponent,
+    FooterComponent
+  ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
