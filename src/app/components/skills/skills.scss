@@ -71,6 +71,12 @@
       .material-symbols-outlined {
         font-size: 2.25rem;
       }
+
+      .brand-icon {
+        width: 2.25rem;
+        height: 2.25rem;
+        filter: brightness(0) invert(1); // Make it white to match the featured style if it's an image
+      }
     }
   }
 }
@@ -98,6 +104,12 @@
 
   .material-symbols-outlined {
     font-size: 1.875rem;
+  }
+
+  .brand-icon {
+    width: 2rem;
+    height: 2rem;
+    object-fit: contain;
   }
 }
 

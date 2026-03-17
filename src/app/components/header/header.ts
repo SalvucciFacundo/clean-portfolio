@@ -11,7 +11,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
           <div class="logo-icon">
             <span class="material-symbols-outlined">code</span>
           </div>
-          <span class="logo-text">Dev<span>Folio</span></span>
+          <span class="logo-text">Facundo<span>Salvucci</span></span>
         </div>
         
         <nav class="nav">
