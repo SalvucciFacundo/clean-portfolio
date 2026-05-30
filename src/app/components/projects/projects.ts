@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, viewChild, ElementRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 interface Project {
   title: string;
@@ -14,73 +15,87 @@ interface Project {
 @Component({
   selector: 'app-projects',
   standalone: true,
+  imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="projects" id="projects">
       <div class="container">
         <div class="projects-header">
-          <h3 class="title">Projects</h3>
+          <h3 class="title">Featured Projects</h3>
           <p class="header-desc">
-            A collection of web applications, AI experiments, and specialized solutions.
+            Explore my latest web applications, AI experiments, and UI concepts.
           </p>
         </div>
 
-        <div class="projects-slider-wrapper">
-          <button class="nav-btn prev" (click)="scroll('left')" aria-label="Previous project">
-            <span class="material-symbols-outlined">chevron_left</span>
-          </button>
-
-          <div class="projects-slider" #slider>
-            @for (project of projects; track project.title) {
-              <div class="project-card">
-                <div class="project-image">
-                  <img [src]="project.image" [alt]="project.title" loading="lazy" />
-                  <div class="project-overlay">
-                    <span class="category-tag">{{ project.category }}</span>
-                    @if (project.statusLabel) {
-                      <span
-                        class="status-tag"
-                        [class.production]="project.statusLabel === 'Production'"
-                      >
-                        {{ project.statusLabel }}
-                      </span>
-                    }
-                  </div>
-                </div>
-                <div class="project-info">
-                  <h4 class="project-title">{{ project.title }}</h4>
-                  <p class="project-description">{{ project.description }}</p>
-                  <div class="project-tags">
-                    @for (tag of project.tags; track tag) {
-                      <span class="tag">{{ tag }}</span>
-                    }
-                  </div>
-                  <div class="project-actions">
-                    @if (project.link) {
-                      <a [href]="project.link" target="_blank" class="project-link">
-                        Live Demo
-                        <span class="material-symbols-outlined">north_east</span>
-                      </a>
-                    }
-                    @if (project.repoLink) {
-                      <a [href]="project.repoLink" target="_blank" class="project-link repo">
-                        GitHub
-                        <span class="material-symbols-outlined">terminal</span>
-                      </a>
-                    }
-                  </div>
-                </div>
+        <div class="showcase-container">
+          <!-- Main Selected Project Detail (Showcase Display) -->
+          <div class="showcase-display">
+            <div class="display-image-container">
+              <img [src]="selectedProject().image" [alt]="selectedProject().title" class="display-image" />
+              <div class="image-overlay">
+                <span class="category-tag">{{ selectedProject().category }}</span>
+                @if (selectedProject().statusLabel) {
+                  <span
+                    class="status-tag"
+                    [class.production]="selectedProject().statusLabel === 'Production'"
+                  >
+                    {{ selectedProject().statusLabel }}
+                  </span>
+                }
               </div>
-            }
+            </div>
+            
+            <div class="display-content">
+              <h4 class="display-title">{{ selectedProject().title }}</h4>
+              <p class="display-description">{{ selectedProject().description }}</p>
+              
+              <div class="display-tags">
+                @for (tag of selectedProject().tags; track tag) {
+                  <span class="tag">{{ tag }}</span>
+                }
+              </div>
+              
+              <div class="display-actions">
+                @if (selectedProject().link) {
+                  <a [href]="selectedProject().link" target="_blank" class="btn-showcase primary">
+                    Live Demo
+                    <span class="material-symbols-outlined">north_east</span>
+                  </a>
+                }
+                @if (selectedProject().repoLink) {
+                  <a [href]="selectedProject().repoLink" target="_blank" class="btn-showcase secondary">
+                    View Code
+                    <span class="material-symbols-outlined">terminal</span>
+                  </a>
+                }
+              </div>
+            </div>
           </div>
 
-          <button class="nav-btn next" (click)="scroll('right')" aria-label="Next project">
-            <span class="material-symbols-outlined">chevron_right</span>
-          </button>
-
-          <div class="slider-hint">
-            <span class="material-symbols-outlined">swipe</span>
-            Scroll horizontally to see more
+          <!-- Thumbnail Sidebar/Carousel -->
+          <div class="showcase-thumbnails-wrapper">
+            <div class="thumbnails-header">
+              <span class="thumbnails-title">Select a Project</span>
+              <span class="thumbnails-count">{{ projects.length }} projects</span>
+            </div>
+            
+            <div class="showcase-thumbnails">
+              @for (project of projects; track project.title) {
+                <button 
+                  class="thumbnail-card" 
+                  [class.active]="selectedProject().title === project.title"
+                  (click)="selectProject(project)"
+                >
+                  <div class="thumbnail-img">
+                    <img [src]="project.image" [alt]="project.title" loading="lazy" />
+                  </div>
+                  <div class="thumbnail-info">
+                    <span class="thumbnail-cat">{{ project.category }}</span>
+                    <h5 class="thumbnail-title">{{ project.title }}</h5>
+                  </div>
+                </button>
+              }
+            </div>
           </div>
         </div>
       </div>
@@ -89,8 +104,6 @@ interface Project {
   styleUrl: './projects.scss',
 })
 export class ProjectsComponent {
-  slider = viewChild<ElementRef<HTMLDivElement>>('slider');
-
   projects: Project[] = [
     {
       title: 'Mis Canarios',
@@ -191,19 +204,9 @@ export class ProjectsComponent {
     },
   ];
 
-  scroll(direction: 'left' | 'right') {
-    const sliderEl = this.slider()?.nativeElement;
-    if (!sliderEl) return;
+  selectedProject = signal<Project>(this.projects[0]);
 
-    const scrollAmount = 412; // Ancho card (380) + gap (32)
-    const newScrollPosition =
-      direction === 'left'
-        ? sliderEl.scrollLeft - scrollAmount
-        : sliderEl.scrollLeft + scrollAmount;
-
-    sliderEl.scrollTo({
-      left: newScrollPosition,
-      behavior: 'smooth',
-    });
+  selectProject(project: Project): void {
+    this.selectedProject.set(project);
   }
 }
