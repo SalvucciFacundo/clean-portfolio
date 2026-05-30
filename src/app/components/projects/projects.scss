@@ -20,7 +20,7 @@
   .title {
     font-size: 3rem;
     font-weight: 900;
-    color: #0f172a;
+    color: var(--text-main);
     margin-bottom: 1rem;
 
     @media (max-width: 640px) {
@@ -122,10 +122,10 @@
 .project-card {
   flex: 0 0 380px;
   scroll-snap-align: start;
-  background: white;
+  background: var(--card-bg);
   border-radius: 2rem;
   overflow: hidden;
-  border: 1px solid #e2e8f0;
+  border: 1px solid var(--card-border);
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   display: flex;
   flex-direction: column;
@@ -222,13 +222,13 @@
   margin-bottom: 1.5rem;
 
   .tag {
-    background: #f1f5f9;
-    color: #475569;
+    background: var(--bg-light);
+    color: var(--text-muted);
     padding: 0.25rem 0.625rem;
     border-radius: 6px;
     font-size: 0.75rem;
     font-weight: 600;
-    border: 1px solid #e2e8f0;
+    border: 1px solid var(--border-color);
   }
 }
 

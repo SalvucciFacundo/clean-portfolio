@@ -20,7 +20,7 @@
   .title {
     font-size: 2.5rem;
     font-weight: 800;
-    color: #0f172a;
+    color: var(--text-main);
   }
 }
 
@@ -53,7 +53,7 @@
   .marker-dot {
     width: 20px;
     height: 20px;
-    background-color: white;
+    background-color: var(--card-bg);
     border: 4px solid #3b82f6;
     border-radius: 50%;
     z-index: 2;
@@ -69,10 +69,11 @@
 }
 
 .timeline-content {
-  background-color: white;
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
   padding: 2rem;
   border-radius: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
   flex-grow: 1;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 
@@ -97,7 +98,7 @@
 .role {
   font-size: 1.25rem;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--text-main);
 }
 
 .period {

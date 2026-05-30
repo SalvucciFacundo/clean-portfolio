@@ -98,6 +98,10 @@ export class ParticlesComponent implements OnDestroy {
     const ctx = this.ctx;
     if (!ctx) return;
 
+    const isDark = typeof document !== 'undefined' && document.body.classList.contains('dark-theme');
+    const particleColor = isDark ? 'rgba(66, 182, 240, 0.85)' : 'rgba(59, 130, 246, 0.65)';
+    const colorRGB = isDark ? '66, 182, 240' : '59, 130, 246';
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Update & draw particles
@@ -113,7 +117,7 @@ export class ParticlesComponent implements OnDestroy {
 
       ctx.beginPath();
       ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(59, 130, 246, 0.65)';
+      ctx.fillStyle = particleColor;
       ctx.fill();
     });
 
@@ -133,7 +137,7 @@ export class ParticlesComponent implements OnDestroy {
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(p2.x, p2.y);
-          ctx.strokeStyle = `rgba(59, 130, 246, ${alpha})`;
+          ctx.strokeStyle = `rgba(${colorRGB}, ${alpha})`;
           ctx.lineWidth = 1;
           ctx.stroke();
         }
@@ -150,7 +154,7 @@ export class ParticlesComponent implements OnDestroy {
           ctx.beginPath();
           ctx.moveTo(p1.x, p1.y);
           ctx.lineTo(this.mouse.x, this.mouse.y);
-          ctx.strokeStyle = `rgba(59, 130, 246, ${alpha})`;
+          ctx.strokeStyle = `rgba(${colorRGB}, ${alpha})`;
           ctx.lineWidth = 1.5;
           ctx.stroke();
         }

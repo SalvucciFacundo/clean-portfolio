@@ -16,10 +16,10 @@
   max-width: 1140px;
   width: 90%;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--navbar-bg);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
-  border: 1px solid rgba(226, 232, 240, 0.7);
+  border: 1px solid var(--navbar-border);
   border-radius: 100px;
   padding: 0.6rem 2rem;
   box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.08);

@@ -26,7 +26,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
               <img
                 src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
                 alt="GitHub"
-                class="btn-icon-img"
+                class="btn-icon-img invert-dark"
               />
               GitHub
             </a>

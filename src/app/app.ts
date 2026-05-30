@@ -7,6 +7,7 @@ import { ExperienceComponent } from './components/experience/experience';
 import { EducationComponent } from './components/education/education';
 import { FooterComponent } from './components/footer/footer';
 import { ParticlesComponent } from './components/particles/particles';
+import { SidebarComponent } from './components/sidebar/sidebar';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,8 @@ import { ParticlesComponent } from './components/particles/particles';
     ExperienceComponent,
     EducationComponent,
     FooterComponent,
-    ParticlesComponent
+    ParticlesComponent,
+    SidebarComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
