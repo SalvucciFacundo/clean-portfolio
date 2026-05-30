@@ -1,12 +1,8 @@
 import {
   Component,
-  Inject,
-  PLATFORM_ID,
   ChangeDetectionStrategy,
-  signal,
-  afterNextRender,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -39,31 +35,13 @@ import { isPlatformBrowser } from '@angular/common';
   styleUrl: './sidebar.scss',
 })
 export class SidebarComponent {
-  isDarkMode = signal(false);
+  constructor(private themeService: ThemeService) {}
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    // Only access localStorage in the browser (SSR safety)
-    afterNextRender(() => {
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      
-      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        this.isDarkMode.set(true);
-        document.body.classList.add('dark-theme');
-      }
-    });
+  isDarkMode() {
+    return this.themeService.isDarkMode();
   }
 
   toggleTheme(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-    
-    this.isDarkMode.set(!this.isDarkMode());
-    if (this.isDarkMode()) {
-      document.body.classList.add('dark-theme');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.body.classList.remove('dark-theme');
-      localStorage.setItem('theme', 'light');
-    }
+    this.themeService.toggleTheme();
   }
 }
