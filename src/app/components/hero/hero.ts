@@ -6,18 +6,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="hero" id="about">
-      <div class="blob-1"></div>
-      <div class="blob-2"></div>
 
       <div class="container hero-layout">
         <div class="hero-content">
-          <div class="availability">
-            <span class="dot">
-              <span class="ping"></span>
-            </span>
-            Available for new projects
-          </div>
-
           <h1 class="headline">
             Building reliable <br />
             <span class="digital-text">web apps</span> with a focus on quality.
@@ -30,48 +21,30 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
             and ensuring quality through rigorous testing.
           </p>
 
-          <div class="qa-badges">
-            <div class="qa-badge">
-              <span class="material-symbols-outlined emoji">check_circle</span>
-              <span>Manual Testing</span>
-            </div>
-            <div class="qa-badge">
-              <span class="material-symbols-outlined emoji">settings_suggest</span>
-              <span>Automated QA</span>
-            </div>
-            <div class="qa-badge">
-              <span class="material-symbols-outlined emoji">bug_report</span>
-              <span>End-to-End Testing</span>
-            </div>
-          </div>
-
           <div class="cta-group">
-            <a href="#projects" class="btn btn-primary cta-btn">
-              View My Work
-              <span class="material-symbols-outlined">arrow_forward</span>
-            </a>
-            <a href="assets/facundo-salvucci_cv.pdf" target="_blank" class="btn btn-outline cv-btn">
-              <span class="material-symbols-outlined">download</span>
-              Get Resume
-            </a>
-          </div>
-
-          <div class="social-links">
-            <a href="https://github.com/SalvucciFacundo" target="_blank" class="social-icon">
+            <a href="https://github.com/SalvucciFacundo" target="_blank" class="btn btn-outline cv-btn">
               <img
                 src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg"
                 alt="GitHub"
+                class="btn-icon-img"
               />
+              GitHub
             </a>
             <a
               href="https://www.linkedin.com/in/facundo-salvucci"
               target="_blank"
-              class="social-icon"
+              class="btn btn-outline cv-btn"
             >
               <img
                 src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/linkedin/linkedin-original.svg"
                 alt="LinkedIn"
+                class="btn-icon-img"
               />
+              LinkedIn
+            </a>
+            <a href="assets/facundo-salvucci_cv.pdf" target="_blank" class="btn btn-primary cv-btn">
+              <span class="material-symbols-outlined">download</span>
+              Get Resume
             </a>
           </div>
         </div>

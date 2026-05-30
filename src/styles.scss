@@ -23,11 +23,12 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px; /* Altura aproximada del sticky header */
+  background-color: var(--bg-light);
 }
 
 body {
   font-family: var(--font-sans);
-  background-color: white;
+  background-color: transparent;
   color: var(--text-main);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
