@@ -1,8 +1,12 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { AuthService } from '../../services/auth.service';
+import { AdminModalComponent } from '../admin-modal/admin-modal';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
+  imports: [CommonModule, AdminModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <footer class="footer">
@@ -26,8 +30,17 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         <div class="bottom-links">
           <a href="#">Privacy Policy</a>
           <a href="#">Terms of Service</a>
+          @if (isLoggedIn()) {
+            <a href="javascript:void(0)" (click)="logout()">Logout (Admin)</a>
+          } @else {
+            <a href="javascript:void(0)" (click)="openLogin()">Admin Login</a>
+          }
         </div>
       </div>
+
+      @if (isModalOpen()) {
+        <app-admin-modal type="login" (close)="closeModal()" />
+      }
     </footer>
   `,
   styles: [`
@@ -106,4 +119,24 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     }
   `]
 })
-export class FooterComponent {}
+export class FooterComponent {
+  private authService = inject(AuthService);
+  isModalOpen = signal(false);
+
+  isLoggedIn() {
+    return this.authService.isLoggedIn();
+  }
+
+  openLogin() {
+    this.isModalOpen.set(true);
+  }
+
+  closeModal() {
+    this.isModalOpen.set(false);
+  }
+
+  logout() {
+    this.authService.logout();
+  }
+}
+

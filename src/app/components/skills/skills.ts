@@ -1,38 +1,47 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-interface Skill {
-  name: string;
-  imgUrl?: string;
-  icon?: string;
-  color: string;
-  bgColor: string;
-  featured?: boolean;
-}
+import { ChangeDetectionStrategy, Component, signal, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { DbService, Skill } from '../../services/db.service';
+import { AuthService } from '../../services/auth.service';
+import { AdminModalComponent } from '../admin-modal/admin-modal';
 
 @Component({
   selector: 'app-skills',
   standalone: true,
+  imports: [CommonModule, AdminModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="skills" id="skills">
       <div class="container">
         <div class="skills-header">
-          <h3 class="title">Tools I use to build</h3>
+          <div class="header-with-action">
+            <h3 class="title">Tools I use to build</h3>
+            @if (isLoggedIn()) {
+              <button class="btn-admin-action" (click)="openAddModal()">
+                <span class="material-symbols-outlined">add</span> Add Skill
+              </button>
+            }
+          </div>
         </div>
 
         <div class="skills-grid">
-          @for (skill of skills; track skill.name) {
+          @for (skill of skills(); track skill.name) {
             <div
               class="skill-card"
               [class.featured]="skill.featured"
               [style.--skill-color]="skill.color"
             >
+              @if (isLoggedIn()) {
+                <button class="btn-skill-edit" (click)="openEditModal(skill)" title="Edit Skill">
+                  <span class="material-symbols-outlined">edit</span>
+                </button>
+              }
+              
               <div class="skill-icon" [style.background-color]="skill.bgColor">
                 @if (skill.imgUrl) {
                   <img [src]="skill.imgUrl" [alt]="skill.name" class="brand-icon" />
                 } @else {
                   <span class="material-symbols-outlined" [style.color]="skill.color">{{
-                    skill.icon
+                    skill.icon || 'code'
                   }}</span>
                 }
               </div>
@@ -41,12 +50,28 @@ interface Skill {
           }
         </div>
       </div>
+
+      <!-- Add/Edit Skill Modal -->
+      @if (isModalOpen()) {
+        <app-admin-modal 
+          type="skill" 
+          [skillData]="editingSkill()"
+          (close)="closeModal()"
+        />
+      }
     </section>
   `,
   styleUrl: './skills.scss',
 })
 export class SkillsComponent {
-  skills: Skill[] = [
+  private dbService = inject(DbService);
+  private authService = inject(AuthService);
+
+  skills = signal<Skill[]>([]);
+  isModalOpen = signal(false);
+  editingSkill = signal<Skill | undefined>(undefined);
+
+  MOCK_SKILLS: Skill[] = [
     {
       name: 'Angular',
       imgUrl: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angular/angular-original.svg',
@@ -98,4 +123,37 @@ export class SkillsComponent {
       bgColor: '#fff7ed',
     },
   ];
+
+  constructor() {
+    this.dbService.getSkills().subscribe({
+      next: (data) => {
+        if (data && data.length > 0) {
+          this.skills.set(data);
+        } else {
+          this.skills.set(this.MOCK_SKILLS);
+        }
+      },
+      error: () => {
+        this.skills.set(this.MOCK_SKILLS);
+      }
+    });
+  }
+
+  isLoggedIn() {
+    return this.authService.isLoggedIn();
+  }
+
+  openAddModal() {
+    this.editingSkill.set(undefined);
+    this.isModalOpen.set(true);
+  }
+
+  openEditModal(skill: Skill) {
+    this.editingSkill.set(skill);
+    this.isModalOpen.set(true);
+  }
+
+  closeModal() {
+    this.isModalOpen.set(false);
+  }
 }
