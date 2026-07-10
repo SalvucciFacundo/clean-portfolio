@@ -103,15 +103,21 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "update_profile",
-        description: "Update or set the profile document at about/profile. Accepts any fields.",
+        description: "Actualiza el documento del perfil general (about/profile) en Firestore. Permite campos como name, headline, summary y pictureUrl.",
         inputSchema: {
           type: "object",
+          properties: {
+            name: { type: "string", description: "Nombre completo" },
+            headline: { type: "string", description: "Título profesional (ej. Full-Stack Developer & QA Specialist)" },
+            summary: { type: "string", description: "Resumen profesional (HTML permitido)" },
+            pictureUrl: { type: "string", description: "URL de la foto de perfil" }
+          },
           additionalProperties: true
         }
       },
       {
         name: "get_contact_info",
-        description: "Get the contact info document from about/contact.",
+        description: "Obtiene la información de contacto y enlaces del documento about/contact.",
         inputSchema: {
           type: "object",
           properties: {}
@@ -119,44 +125,51 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "update_contact_info",
-        description: "Update or set the contact info document at about/contact. Accepts any fields.",
+        description: "Actualiza la información de contacto y redes sociales (about/contact) en Firestore. Admite email, phone, location, github, linkedin, etc.",
         inputSchema: {
           type: "object",
+          properties: {
+            email: { type: "string", description: "Correo electrónico de contacto" },
+            phone: { type: "string", description: "Teléfono" },
+            location: { type: "string", description: "Ubicación (ej. Mendoza, Argentina)" },
+            github: { type: "string", description: "URL de GitHub" },
+            linkedin: { type: "string", description: "URL de LinkedIn" }
+          },
           additionalProperties: true
         }
       },
       {
         name: "list_skills",
-        description: "List all skill groups from the skills collection.",
+        description: "Obtiene la lista de todas las habilidades del portafolio (skills) en Firestore.",
         inputSchema: {
           type: "object",
           properties: {}
         }
       },
       {
-        name: "save_skill_group",
-        description: "Create or update a skill group in the skills collection. If 'id' is provided, updates that document, otherwise auto-generates a new document ID.",
+        name: "save_skill",
+        description: "Crea o actualiza una habilidad en el portafolio (Skill). Si se pasa 'id', actualiza, sino genera un ID nuevo.",
         inputSchema: {
           type: "object",
           properties: {
-            id: {
-              type: "string",
-              description: "The unique document ID. If omitted, a new document ID is auto-generated."
-            }
+            id: { type: "string", description: "ID del documento en Firestore. Si se omite, se generará uno nuevo." },
+            name: { type: "string", description: "Nombre de la habilidad (ej. Angular, Firebase, TypeScript)" },
+            imgUrl: { type: "string", description: "URL de la imagen del icono de la habilidad" },
+            icon: { type: "string", description: "Nombre opcional del icono Material Symbols" },
+            color: { type: "string", description: "Color principal en formato hex o rgb (ej. #dd0031)" },
+            bgColor: { type: "string", description: "Color de fondo de la tarjeta en formato hex o rgb (ej. #fef2f2)" },
+            featured: { type: "boolean", description: "Indica si es una habilidad destacada en el home" }
           },
-          additionalProperties: true
+          required: ["name", "color", "bgColor"]
         }
       },
       {
-        name: "delete_skill_group",
-        description: "Delete a skill group from the skills collection by ID.",
+        name: "delete_skill",
+        description: "Elimina una habilidad del portafolio por su ID.",
         inputSchema: {
           type: "object",
           properties: {
-            id: {
-              type: "string",
-              description: "The unique document ID of the skill group to delete."
-            }
+            id: { type: "string", description: "ID del documento de la habilidad a eliminar." }
           },
           required: ["id"]
         }
@@ -269,30 +282,30 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
-      case "save_skill_group": {
+      case "save_skill": {
         const { id, ...data } = (args || {}) as { id?: string; [key: string]: any };
         if (id) {
           const docRef = db.collection('skills').doc(id);
           await docRef.set(data, { merge: true });
           return {
-            content: [{ type: "text", text: JSON.stringify({ success: true, id, message: "Skill group updated successfully." }) }]
+            content: [{ type: "text", text: `Skill '${id}' saved successfully` }]
           };
         } else {
           const docRef = await db.collection('skills').add(data);
           return {
-            content: [{ type: "text", text: JSON.stringify({ success: true, id: docRef.id, message: "Skill group created successfully." }) }]
+            content: [{ type: "text", text: `Skill created with ID: ${docRef.id}` }]
           };
         }
       }
 
-      case "delete_skill_group": {
+      case "delete_skill": {
         const { id } = (args || {}) as { id: string };
         if (!id) {
           throw new Error("Missing required argument 'id'");
         }
         await db.collection('skills').doc(id).delete();
         return {
-          content: [{ type: "text", text: JSON.stringify({ success: true, message: `Skill group ${id} deleted successfully.` }) }]
+          content: [{ type: "text", text: `Skill '${id}' deleted successfully` }]
         };
       }
 
