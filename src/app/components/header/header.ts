@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ThemeService } from '../../services/theme.service';
 
@@ -71,7 +71,17 @@ import { ThemeService } from '../../services/theme.service';
 export class HeaderComponent {
   isMenuOpen = signal(false);
 
-  constructor(private themeService: ThemeService) {}
+  constructor(
+    private themeService: ThemeService,
+    private elementRef: ElementRef
+  ) {}
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (this.isMenuOpen() && !this.elementRef.nativeElement.contains(event.target)) {
+      this.closeMenu();
+    }
+  }
 
   isDarkMode() {
     return this.themeService.isDarkMode();
