@@ -170,18 +170,23 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
         }
       },
       {
-        name: "save_project",
-        description: "Create or update a project in the projects collection. If 'id' is provided, updates that document, otherwise auto-generates a new document ID.",
+        name: 'save_project',
+        description: 'Crea o actualiza un proyecto del portafolio (Project).',
         inputSchema: {
-          type: "object",
+          type: 'object',
           properties: {
-            id: {
-              type: "string",
-              description: "The unique document ID. If omitted, a new document ID is auto-generated."
-            }
+            id: { type: 'string', description: 'ID del documento en Firestore. Si se omite, se generará uno nuevo.' },
+            title: { type: 'string' },
+            description: { type: 'string' },
+            image: { type: 'string', description: 'URL o ruta de la imagen del proyecto' },
+            category: { type: 'string', description: 'Categoría del proyecto (Full-Stack, E-commerce, Dashboard, etc.)' },
+            statusLabel: { type: 'string', description: 'Estado opcional: Production, In Progress, etc.' },
+            tags: { type: 'array', items: { type: 'string' } },
+            link: { type: 'string', description: 'URL del proyecto en vivo' },
+            repoLink: { type: 'string', description: 'URL del repositorio GitHub' },
           },
-          additionalProperties: true
-        }
+          required: ['title', 'description', 'tags'],
+        },
       },
       {
         name: "delete_project",
@@ -303,19 +308,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         };
       }
 
-      case "save_project": {
+      case 'save_project': {
         const { id, ...data } = (args || {}) as { id?: string; [key: string]: any };
         if (id) {
-          const docRef = db.collection('projects').doc(id);
-          await docRef.set(data, { merge: true });
-          return {
-            content: [{ type: "text", text: JSON.stringify({ success: true, id, message: "Project updated successfully." }) }]
-          };
+          await db.collection('projects').doc(id).set(data, { merge: true });
+          return { content: [{ type: 'text', text: `Project '${id}' saved successfully` }] };
         } else {
           const docRef = await db.collection('projects').add(data);
-          return {
-            content: [{ type: "text", text: JSON.stringify({ success: true, id: docRef.id, message: "Project created successfully." }) }]
-          };
+          return { content: [{ type: 'text', text: `Project created with ID: ${docRef.id}` }] };
         }
       }
 
