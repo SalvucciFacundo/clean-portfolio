@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-experience',
@@ -12,7 +13,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         </div>
 
         <div class="experience-timeline">
-          @for (exp of experience; track exp.id) {
+          @for (exp of experience(); track exp.id) {
             <div class="timeline-item">
               <div class="timeline-marker">
                 <div class="marker-dot"></div>
@@ -37,8 +38,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   `,
   styleUrl: './experience.scss',
 })
-export class ExperienceComponent {
-  experience = [
+export class ExperienceComponent implements OnInit {
+  private dbService = inject(DbService);
+
+  experience = signal<any[]>([
     {
       id: 'exp1',
       company: 'Freelance',
@@ -63,5 +66,15 @@ export class ExperienceComponent {
       description:
         '<ul><li>Documented technical procedures and user feedback to assist developers in prioritizing feature updates.</li><li>Managed complex client inquiries and resolved service-level issues in a fast-paced environment.</li></ul>',
     },
-  ];
+  ]);
+
+  ngOnInit() {
+    this.dbService.getExperience().subscribe(list => {
+      if (list && list.length > 0) {
+        // Sort by id or date if needed, but Firestore does not guarantee order unless specified.
+        // Let's keep the order from the database or sort them.
+        this.experience.set(list);
+      }
+    });
+  }
 }

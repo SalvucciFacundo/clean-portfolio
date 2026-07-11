@@ -236,6 +236,40 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                     },
                     required: ["id"]
                 }
+            },
+            {
+                name: "list_experience",
+                description: "Obtiene la lista de toda la experiencia profesional (experience) en Firestore.",
+                inputSchema: {
+                    type: "object",
+                    properties: {}
+                }
+            },
+            {
+                name: "save_experience",
+                description: "Crea o actualiza una experiencia profesional (Experience) en Firestore. Si se pasa 'id', actualiza, sino genera un ID nuevo.",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        id: { type: "string", description: "ID del documento en Firestore. Si se omite, se generará uno nuevo." },
+                        company: { type: "string", description: "Nombre de la empresa (ej: Freelance, Dubbz)" },
+                        position: { type: "string", description: "Cargo o puesto desempeñado (ej: Full-Stack Developer)" },
+                        period: { type: "string", description: "Periodo de tiempo trabajado (ej: '2023 - Present', '2023 - 2025')" },
+                        description: { type: "string", description: "Descripción detallada del puesto (soporta HTML, ej: '<ul><li>Logro 1</li>...</ul>')" }
+                    },
+                    required: ["company", "position", "period", "description"]
+                }
+            },
+            {
+                name: "delete_experience",
+                description: "Elimina una experiencia profesional del portafolio por su ID.",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        id: { type: "string", description: "ID del documento de la experiencia a eliminar." }
+                    },
+                    required: ["id"]
+                }
             }
         ]
     };
@@ -354,6 +388,36 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 return {
                     content: [{ type: "text", text: JSON.stringify({ success: true, message: `Project ${id} deleted successfully.` }) }]
                 };
+            }
+            case "list_experience": {
+                const colRef = db.collection('experience');
+                const snapshot = await colRef.get();
+                const experience = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                return {
+                    content: [{ type: "text", text: JSON.stringify(experience) }]
+                };
+            }
+            case "save_experience": {
+                const { id, ...data } = (args || {});
+                if (id) {
+                    await db.collection('experience').doc(id).set(data, { merge: true });
+                    return { content: [{ type: 'text', text: `Experience '${id}' saved successfully` }] };
+                }
+                else {
+                    const docRef = await db.collection('experience').add(data);
+                    return { content: [{ type: 'text', text: `Experience created with ID: ${docRef.id}` }] };
+                }
+            }
+            case "delete_experience": {
+                const { id } = (args || {});
+                if (!id) {
+                    throw new Error("Missing required argument 'id'");
+                }
+                await db.collection('experience').doc(id).delete();
+                return { content: [{ type: 'text', text: `Experience '${id}' deleted successfully` }] };
             }
             default:
                 throw new Error(`Unknown tool: ${name}`);

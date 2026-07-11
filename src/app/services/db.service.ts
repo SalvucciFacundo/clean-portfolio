@@ -79,4 +79,24 @@ export class DbService {
     const contactDoc = doc(this.firestore, 'about/contact');
     return docData(contactDoc) as Observable<any>;
   }
+
+  getExperience(): Observable<any[]> {
+    const experienceCol = collection(this.firestore, 'experience');
+    return collectionData(experienceCol, { idField: 'id' }) as Observable<any[]>;
+  }
+
+  addExperience(exp: any) {
+    const experienceCol = collection(this.firestore, 'experience');
+    return addDoc(experienceCol, exp);
+  }
+
+  updateExperience(id: string, exp: Partial<any>) {
+    const experienceDoc = doc(this.firestore, `experience/${id}`);
+    return setDoc(experienceDoc, exp, { merge: true });
+  }
+
+  deleteExperience(id: string) {
+    const experienceDoc = doc(this.firestore, `experience/${id}`);
+    return deleteDoc(experienceDoc);
+  }
 }
