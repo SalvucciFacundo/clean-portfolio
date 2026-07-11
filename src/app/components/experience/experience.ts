@@ -71,9 +71,7 @@ export class ExperienceComponent implements OnInit {
   ngOnInit() {
     this.dbService.getExperience().subscribe(list => {
       if (list && list.length > 0) {
-        // Sort by id or date if needed, but Firestore does not guarantee order unless specified.
-        // Let's keep the order from the database or sort them.
-        this.experience.set(list);
+        this.experience.set(list.sort((a, b) => (a.order || 0) - (b.order || 0)));
       }
     });
   }
