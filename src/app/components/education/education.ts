@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
+import { DbService } from '../../services/db.service';
 
 @Component({
   selector: 'app-education',
@@ -13,7 +14,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         </div>
 
         <div class="education-grid">
-          @for (edu of education; track edu.title) {
+          @for (edu of education(); track edu.title) {
             <div class="education-card">
               <div class="card-header">
                 <span class="material-symbols-outlined emoji">school</span>
@@ -30,8 +31,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   `,
   styleUrl: './education.scss',
 })
-export class EducationComponent {
-  education = [
+export class EducationComponent implements OnInit {
+  private dbService = inject(DbService);
+
+  education = signal<any[]>([
     {
       title: 'Associate Degree in Computer Programming',
       school: 'Universidad Tecnológica Nacional (UTN)',
@@ -44,5 +47,13 @@ export class EducationComponent {
       date: '2012 - 2018',
       description: 'Technical high school diploma with a focus on engineering principles and industrial processes.'
     }
-  ];
+  ]);
+
+  ngOnInit() {
+    this.dbService.getEducation().subscribe(list => {
+      if (list && list.length > 0) {
+        this.education.set(list);
+      }
+    });
+  }
 }

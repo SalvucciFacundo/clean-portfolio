@@ -99,4 +99,24 @@ export class DbService {
     const experienceDoc = doc(this.firestore, `experience/${id}`);
     return deleteDoc(experienceDoc);
   }
+
+  getEducation(): Observable<any[]> {
+    const educationCol = collection(this.firestore, 'education');
+    return collectionData(educationCol, { idField: 'id' }) as Observable<any[]>;
+  }
+
+  addEducation(edu: any) {
+    const educationCol = collection(this.firestore, 'education');
+    return addDoc(educationCol, edu);
+  }
+
+  updateEducation(id: string, edu: Partial<any>) {
+    const educationDoc = doc(this.firestore, `education/${id}`);
+    return setDoc(educationDoc, edu, { merge: true });
+  }
+
+  deleteEducation(id: string) {
+    const educationDoc = doc(this.firestore, `education/${id}`);
+    return deleteDoc(educationDoc);
+  }
 }

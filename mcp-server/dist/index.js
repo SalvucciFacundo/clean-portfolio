@@ -270,6 +270,40 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                     },
                     required: ["id"]
                 }
+            },
+            {
+                name: "list_education",
+                description: "Obtiene la lista de toda la formación académica (education) en Firestore.",
+                inputSchema: {
+                    type: "object",
+                    properties: {}
+                }
+            },
+            {
+                name: "save_education",
+                description: "Crea o actualiza una formación académica (Education) en Firestore. Si se pasa 'id', actualiza, sino genera un ID nuevo.",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        id: { type: "string", description: "ID del documento en Firestore. Si se omite, se generará uno nuevo." },
+                        title: { type: "string", description: "Título o carrera cursada (ej: Associate Degree in Computer Programming)" },
+                        school: { type: "string", description: "Institución o universidad (ej: Universidad Tecnológica Nacional (UTN))" },
+                        date: { type: "string", description: "Período de cursada (ej: '2019 - 2021')" },
+                        description: { type: "string", description: "Descripción corta de lo aprendido o materias clave." }
+                    },
+                    required: ["title", "school", "date", "description"]
+                }
+            },
+            {
+                name: "delete_education",
+                description: "Elimina una formación académica del portafolio por su ID.",
+                inputSchema: {
+                    type: "object",
+                    properties: {
+                        id: { type: "string", description: "ID del documento de la educación a eliminar." }
+                    },
+                    required: ["id"]
+                }
             }
         ]
     };
@@ -418,6 +452,36 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
                 }
                 await db.collection('experience').doc(id).delete();
                 return { content: [{ type: 'text', text: `Experience '${id}' deleted successfully` }] };
+            }
+            case "list_education": {
+                const colRef = db.collection('education');
+                const snapshot = await colRef.get();
+                const education = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                return {
+                    content: [{ type: "text", text: JSON.stringify(education) }]
+                };
+            }
+            case "save_education": {
+                const { id, ...data } = (args || {});
+                if (id) {
+                    await db.collection('education').doc(id).set(data, { merge: true });
+                    return { content: [{ type: 'text', text: `Education '${id}' saved successfully` }] };
+                }
+                else {
+                    const docRef = await db.collection('education').add(data);
+                    return { content: [{ type: 'text', text: `Education created with ID: ${docRef.id}` }] };
+                }
+            }
+            case "delete_education": {
+                const { id } = (args || {});
+                if (!id) {
+                    throw new Error("Missing required argument 'id'");
+                }
+                await db.collection('education').doc(id).delete();
+                return { content: [{ type: 'text', text: `Education '${id}' deleted successfully` }] };
             }
             default:
                 throw new Error(`Unknown tool: ${name}`);
