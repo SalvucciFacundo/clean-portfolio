@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Firestore, collection, collectionData, doc, setDoc, deleteDoc, addDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, doc, docData, setDoc, deleteDoc, addDoc } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 export interface Project {
@@ -68,5 +68,15 @@ export class DbService {
   deleteSkill(id: string) {
     const skillDoc = doc(this.firestore, `skills/${id}`);
     return deleteDoc(skillDoc);
+  }
+
+  getProfile(): Observable<any> {
+    const profileDoc = doc(this.firestore, 'about/profile');
+    return docData(profileDoc) as Observable<any>;
+  }
+
+  getContactInfo(): Observable<any> {
+    const contactDoc = doc(this.firestore, 'about/contact');
+    return docData(contactDoc) as Observable<any>;
   }
 }
