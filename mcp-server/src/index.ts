@@ -103,14 +103,26 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "update_profile",
-        description: "Actualiza el documento del perfil general (about/profile) en Firestore. Permite campos como name, headline, summary y pictureUrl.",
+        description: "Actualiza el documento de perfil general (about/profile) en Firestore. Modifica los textos principales y la foto del Hero.",
         inputSchema: {
           type: "object",
           properties: {
-            name: { type: "string", description: "Nombre completo" },
-            headline: { type: "string", description: "Título profesional (ej. Full-Stack Developer & QA Specialist)" },
-            summary: { type: "string", description: "Resumen profesional (HTML permitido)" },
-            pictureUrl: { type: "string", description: "URL de la foto de perfil" }
+            name: { 
+              type: "string", 
+              description: "Nombre completo del desarrollador (se muestra en el Header, Hero alt, footer copyright, etc.)" 
+            },
+            headline: { 
+              type: "string", 
+              description: "Título o encabezado principal en texto gigante del Hero (ej: 'Building reliable <br /> <span class=\"digital-text\">web apps</span> with a focus on quality.'). Soporta HTML para estilos." 
+            },
+            summary: { 
+              type: "string", 
+              description: "Párrafo de descripción/resumen profesional en el Hero (ej: 'I\'m a <span class=\"highlight\">Full-Stack Developer...</span>'). Soporta HTML y clases de color: highlight, highlight-angular, highlight-firebase." 
+            },
+            pictureUrl: { 
+              type: "string", 
+              description: "Ruta o URL de la imagen de perfil principal mostrada en el Hero (ej: 'assets/profile2.jpg')" 
+            }
           },
           additionalProperties: true
         }
@@ -125,15 +137,34 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: "update_contact_info",
-        description: "Actualiza la información de contacto y redes sociales (about/contact) en Firestore. Admite email, phone, location, github, linkedin, etc.",
+        description: "Actualiza la información de contacto y redes sociales (about/contact) en Firestore. Afecta a los botones de redes y descarga de CV del Hero.",
         inputSchema: {
           type: "object",
           properties: {
-            email: { type: "string", description: "Correo electrónico de contacto" },
-            phone: { type: "string", description: "Teléfono" },
-            location: { type: "string", description: "Ubicación (ej. Mendoza, Argentina)" },
-            github: { type: "string", description: "URL de GitHub" },
-            linkedin: { type: "string", description: "URL de LinkedIn" }
+            email: { 
+              type: "string", 
+              description: "Correo electrónico de contacto profesional (se usa para el botón 'Hire Me' en el Header)" 
+            },
+            phone: { 
+              type: "string", 
+              description: "Número de teléfono de contacto" 
+            },
+            location: { 
+              type: "string", 
+              description: "Ubicación geográfica (ej: 'Mendoza, Argentina (Remote)')" 
+            },
+            github: { 
+              type: "string", 
+              description: "URL completa de tu perfil de GitHub (se muestra como botón en el Hero y enlace en Header/redes)" 
+            },
+            linkedin: { 
+              type: "string", 
+              description: "URL completa de tu perfil de LinkedIn (se muestra como botón en el Hero y enlace en Header/redes)" 
+            },
+            resumeUrl: { 
+              type: "string", 
+              description: "Ruta o URL del archivo PDF de tu CV, descargado por el botón 'Get Resume' del Hero (ej: 'assets/facundo-salvucci_cv.pdf')" 
+            }
           },
           additionalProperties: true
         }
